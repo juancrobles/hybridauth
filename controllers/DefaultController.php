@@ -57,7 +57,9 @@ class DefaultController extends Controller {
 				// (we might not get it from the provider)
 				if ($this->module->withYiiUser == true) {
 					Yii::import('application.modules.user.models.*');
-				} else {
+                    Profile::$regMode = true;
+
+                } else {
 					Yii::import('application.models.*');
 				}
 
@@ -65,6 +67,7 @@ class DefaultController extends Controller {
 				if (isset($_POST['User'])) {
 					//Save the form
 					$user->attributes = $_POST['User'];
+
 
 					if ($user->validate() && $user->save()) {
 						if ($this->module->withYiiUser == true) {
@@ -80,6 +83,7 @@ class DefaultController extends Controller {
 						$this->_linkProvider($identity);
 						$this->_loginUser($identity);
 					} // } else { do nothing } => the form will get redisplayed
+
 				} else {
 					//Display the form with some entries prefilled if we have the info.
 					if (isset($identity->userData->email)) {
