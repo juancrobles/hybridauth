@@ -82,6 +82,9 @@ class DefaultController extends Controller {
 						$identity->username = $user->username;
 						$this->_linkProvider($identity);
 						$this->_loginUser($identity);
+                        if($this->module->withYiiUser)
+                            $this->redirect(Yii::app()->getModule('user')->profileUrl);
+
 					} // } else { do nothing } => the form will get redisplayed
 
 				} else {
@@ -100,7 +103,8 @@ class DefaultController extends Controller {
 				// They are already logged in, link their user account with new provider
 				$identity->id = Yii::app()->user->id;
 				$this->_linkProvider($identity);
-				$this->redirect(Yii::app()->session['hybridauth-ref']);
+//				$this->redirect(Yii::app()->session['hybridauth-ref']);
+                $this->redirect(Yii::app()->getModule('user')->profileUrl);
 				unset(Yii::app()->session['hybridauth-ref']);
 			}
 		}
@@ -116,7 +120,7 @@ class DefaultController extends Controller {
 	
 	private function _loginUser($identity) {
 		Yii::app()->user->login($identity, 0);
-		$this->redirect(Yii::app()->user->returnUrl);
+		$this->redirect(Yii::app()->getModule('user')->profileUrl);
 	}
 
 	/** 
